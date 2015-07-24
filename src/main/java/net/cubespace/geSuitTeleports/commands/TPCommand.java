@@ -16,12 +16,17 @@ public class TPCommand implements CommandExecutor {
 
         if ( !( sender instanceof Player ) ) {
             if ( args.length == 2 ) {
-                Bukkit.getPlayer(args[0]).saveData();
-                Bukkit.getPlayer( args[0] ).teleport( Bukkit.getPlayer( args[1] ) );
+            	Player p = Bukkit.getPlayer(args[0]);
+            	if ( p != null ) {
+            		p.saveData();
+            		p.teleport( Bukkit.getPlayer( args[1] ) );
+            	}
             } else if ( args.length == 4 ) {
                 Player p = Bukkit.getPlayer( args[0] );
+            	if ( p != null ) {
                 p.saveData();
                 p.teleport( new Location( p.getWorld(), Double.parseDouble( args[1] ), Double.parseDouble( args[2] ), Double.parseDouble( args[3] ) ) );
+            	}
             }
         }
         if ( args.length == 1 ) {
@@ -30,7 +35,9 @@ public class TPCommand implements CommandExecutor {
             return true;
 
         } else if ( args.length == 2 ) {
-            Bukkit.getPlayer(args[0]).saveData();
+            Player p = Bukkit.getPlayer( args[0] );
+        	if ( p != null )
+        		p.saveData();
             TeleportsManager.teleportToPlayer( sender, args[0], args[1] );
             return true;
         }
@@ -48,8 +55,9 @@ public class TPCommand implements CommandExecutor {
         }
 
         if ( args.length == 5 ) {
-            if ( Bukkit.getPlayer( args[0] ) != null ) {
-                Bukkit.getPlayer(args[0]).saveData();
+            Player p = Bukkit.getPlayer( args[0] );
+        	if ( p != null ) {
+        		p.saveData();
                 TeleportsManager.teleportToLocation( args[0], "", args[4], Double.valueOf( args[1] ), Double.valueOf( args[2] ), Double.valueOf( args[3] ) );
             } else {
                 Bukkit.getPlayer(sender.getName()).saveData();

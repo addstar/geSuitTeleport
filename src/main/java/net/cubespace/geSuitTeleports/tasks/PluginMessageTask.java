@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.ByteArrayOutputStream;
+import java.util.Collection;
 
 public class PluginMessageTask extends BukkitRunnable {
 
@@ -21,11 +22,11 @@ public class PluginMessageTask extends BukkitRunnable {
 
     @SuppressWarnings("unchecked")
     public void run() {
-        Player[] players = Bukkit.getOnlinePlayers();
-        if ( players.length == 0 ) {
+        Collection<Player> players = (Collection<Player>) Bukkit.getOnlinePlayers();
+        if ( players.size() == 0 ) {
             return;
         }
-        Player p = Bukkit.getOnlinePlayers()[0];
+        Player p = players.iterator().next();
         if ( p == null ) {
             return;
         }
