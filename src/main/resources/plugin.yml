@@ -8,13 +8,12 @@ commands:
         description: Teleports a player to another player or location
         aliases: [teleport,tpo]
         permission: gesuit.teleports.command.tp
-        permission-message: Â§cYou do not have permission for this command
+        permission-message: §cYou do not have permission for this command
         usage: |
                /<command> (player)
                /<command> (player) (player)
-               /<command> (x) (y) (z) [world]
-               /<command> (player) (x) (y) (z) [world]
-               /<command> (server) (world) (x) (y) (z)
+               /<command> (x) (y) (z) [world] [server]
+               /<command> (player) (x) (y) (z) [world] [server]
     tphere:
         description: Teleports a player to you
         aliases: [teleporthere,tptome,tpohere]
