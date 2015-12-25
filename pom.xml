@@ -13,26 +13,29 @@
     </properties>
 
     <repositories>
-      <repository>
-        <id>md5-repo</id>
-        <url>http://repo.md-5.net/content/groups/public/</url>
-        <releases><enabled>true</enabled></releases>
-        <snapshots><enabled>true</enabled></snapshots>
-      </repository>
+        <repository>
+            <id>spigot-repo</id>
+            <url>https://hub.spigotmc.org/nexus/content/groups/public</url>
+        </repository>
     </repositories>
 
     <dependencies>
-      <dependency>
-        <groupId>org.spigotmc</groupId>
-        <artifactId>spigot</artifactId>
-        <version>1.7.10-R0.1-SNAPSHOT</version>
-    	<exclusions>
-          <exclusion>
+        <dependency>
+            <groupId>org.bukkit</groupId>
+            <artifactId>bukkit</artifactId>
+            <version>1.8.7-R0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
             <groupId>org.spigotmc</groupId>
-            <artifactId>sneaky-throw</artifactId>
-          </exclusion>
-        </exclusions>
-      </dependency>
+            <artifactId>spigot</artifactId>
+            <version>1.8.7-R0.1-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.spigotmc</groupId>
+                    <artifactId>sneaky-throw</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
     </dependencies>
     <build>
         <finalName>${project.name}</finalName>
