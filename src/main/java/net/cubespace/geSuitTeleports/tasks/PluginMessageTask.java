@@ -1,5 +1,6 @@
 package net.cubespace.geSuitTeleports.tasks;
 
+import com.google.common.collect.Iterables;
 import net.cubespace.geSuitTeleports.geSuitTeleports;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -21,11 +22,7 @@ public class PluginMessageTask extends BukkitRunnable {
 
     @SuppressWarnings("unchecked")
     public void run() {
-        Player[] players = Bukkit.getOnlinePlayers();
-        if ( players.length == 0 ) {
-            return;
-        }
-        Player p = Bukkit.getOnlinePlayers()[0];
+        Player p = Iterables.getFirst(Bukkit.getOnlinePlayers(), null);
         if ( p == null ) {
             return;
         }

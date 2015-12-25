@@ -61,7 +61,7 @@ public class TeleportsListener implements Listener {
 		if (e.getPlayer().hasMetadata("NPC")) return; // Ignore NPCs
 		TeleportsManager.RemovePlayer(e.getPlayer());
 		boolean empty = false;
-		if(Bukkit.getOnlinePlayers().length==1){
+		if(Bukkit.getOnlinePlayers().size() == 1){
 			empty = true;
 		}
 		TeleportsManager.sendTeleportBackLocation(e.getPlayer(), empty);
