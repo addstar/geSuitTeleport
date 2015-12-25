@@ -14,6 +14,15 @@ commands:
                /<command> (player) (player)
                /<command> (x) (y) (z) [world] [server]
                /<command> (player) (x) (y) (z) [world] [server]
+    tppos:
+        description: Teleports a player to a specific location
+        permission: gesuit.teleports.command.tppos
+        permission-message: §cYou do not have permission for this command
+        usage: |
+               /<command> (x) (y) (z) [world]
+               /<command> (x) (y) (z) (yaw) (pitch) [world] [server]
+               /<command> (player) (x) (y) (z) [world]
+               /<command> (player) (x) (y) (z) (yaw) (pitch) [world] [server]
     tphere:
         description: Teleports a player to you
         aliases: [teleporthere,tptome,tpohere]
@@ -79,6 +88,7 @@ permissions:
         children:
             gesuit.teleports.vip: true
             gesuit.teleports.command.tp: true
+            gesuit.teleports.command.tppos: true
             gesuit.teleports.command.tphere: true
             gesuit.teleports.command.tpall: true
             gesuit.teleports.tp.silent: true

@@ -11,6 +11,7 @@ import net.cubespace.geSuitTeleports.commands.TPAllCommand;
 import net.cubespace.geSuitTeleports.commands.TPCommand;
 import net.cubespace.geSuitTeleports.commands.TPDenyCommand;
 import net.cubespace.geSuitTeleports.commands.TPHereCommand;
+import net.cubespace.geSuitTeleports.commands.TPPosCommand;
 import net.cubespace.geSuitTeleports.commands.ToggleCommand;
 import net.cubespace.geSuitTeleports.commands.TopCommand;
 import net.cubespace.geSuitTeleports.listeners.TeleportsListener;
@@ -29,6 +30,7 @@ public class geSuitTeleports extends JavaPlugin {
 
     private void registerCommands() {
         getCommand("tp").setExecutor(new TPCommand());
+        getCommand("tppos").setExecutor(new TPPosCommand());
         getCommand("tphere").setExecutor(new TPHereCommand());
         getCommand("tpall").setExecutor(new TPAllCommand());
         getCommand("tpa").setExecutor(new TPACommand());

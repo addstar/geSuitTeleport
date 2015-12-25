@@ -373,7 +373,7 @@ public class TeleportsManager {
         }
     }
 
-    public static void teleportToLocation( String player, String server, String world, Double x, Double y, Double z) {
+    public static void teleportToLocation( String player, String server, String world, double x, double y, double z, float yaw, float pitch ) {
         ByteArrayOutputStream b = new ByteArrayOutputStream();
         DataOutputStream out = new DataOutputStream( b );
         try {
@@ -384,6 +384,9 @@ public class TeleportsManager {
             out.writeDouble( x );
             out.writeDouble( y );
             out.writeDouble( z );
+            out.writeDouble( z );
+            out.writeFloat( yaw );
+            out.writeFloat( pitch );
         } catch ( IOException e ) {
             e.printStackTrace();
         }
