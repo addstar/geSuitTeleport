@@ -21,6 +21,10 @@ public class TPPosCommand implements CommandExecutor {
                 }
 
                 Player p = Bukkit.getPlayer(args[0]);
+                if (p == null) {
+                    sender.sendMessage(ChatColor.RED + "Invalid username or player is offline.");
+                }
+
                 // tppos Player X Y Z
                 if (args.length == 4) {
                     p.saveData();

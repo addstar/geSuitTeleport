@@ -384,7 +384,6 @@ public class TeleportsManager {
             out.writeDouble( x );
             out.writeDouble( y );
             out.writeDouble( z );
-            out.writeDouble( z );
             out.writeFloat( yaw );
             out.writeFloat( pitch );
         } catch ( IOException e ) {
