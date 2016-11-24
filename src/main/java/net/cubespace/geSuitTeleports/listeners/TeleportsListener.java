@@ -138,12 +138,13 @@ public class TeleportsListener implements Listener {
 
 	private boolean worldGuardTpAllowed(Location l,Player p){
 		if(!geSuitTeleports.worldGuarded){
+			log.info("worldguard not hooked");
 			return true;
 		}
 		RegionContainer container = geSuitTeleports.getWorldGaurd().getRegionContainer();
 		RegionQuery query = container.createQuery();
 		ApplicableRegionSet set = query.getApplicableRegions(l);
-		if(!set.isVirtual()){
+		if(set.isVirtual()){
 			//VirtualSet indicates that there is no region protection to check
 			//log.info("Region set was virtual");
 			return true;
