@@ -53,6 +53,10 @@
             <id>sk89q-repo</id>
             <url>http://maven.sk89q.com/repo/</url>
         </repository>
+        <repository>
+            <id>local-repo</id>
+            <url>file://${basedir}/lib</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -70,7 +74,7 @@
         <dependency>
             <groupId>net.cubespace</groupId>
             <artifactId>geSuitSpawn</artifactId>
-            <version>0.1.1-SNAPSHOT</version>
+            <version>0.1.0</version>
         </dependency>
     </dependencies>
     <build>
