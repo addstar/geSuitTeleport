@@ -70,10 +70,7 @@ public class TeleportsListener implements Listener {
 	
 	@EventHandler (ignoreCancelled = true)
 	public void playerTeleport(PlayerTeleportEvent e){
-		if(e.isCancelled()){
-			return;
-		}
-		if(!worldGuardTpAllowed(e.getTo(),e.getPlayer())){ //cancel the event if the location is blocked
+		if(e.getCause() != TeleportCause.UNKNOWN && !worldGuardTpAllowed(e.getTo(),e.getPlayer())){ //cancel the event if the location is blocked
 			e.setCancelled(true);
 			e.setTo(e.getFrom());
 			return;
@@ -150,7 +147,6 @@ public class TeleportsListener implements Listener {
 			return true;
 		}
 		for(ProtectedRegion region : set){
-			log.info(region.getId());
 			if(!playerAllowedIntoRegion(p,region)){
 				return false;
 			}
@@ -162,7 +158,7 @@ public class TeleportsListener implements Listener {
 	private boolean playerAllowedIntoRegion(final Player p,final ProtectedRegion region){
 		final Set<String> flags = region.getFlag(DefaultFlag.BLOCKED_CMDS);
 		if(flags == null) return true;
-		log.info("Blocked Commands Found:" + flags.toString());
+		//log.info("Blocked Commands Found:" + flags.toString());
 		for(final String cmd : flags){
 			if(geSuitTeleports.deny_Teleport.contains(cmd)){
 				//log.info("Blocked commands contains teleport deny command: " + cmd);
@@ -174,7 +170,7 @@ public class TeleportsListener implements Listener {
 					return true;
 				}else{
 					p.sendMessage(geSuitTeleports.location_blocked);
-					log.info("Denied teleport for " + p.getDisplayName() + " into region " + region.getId());
+					log.info("Denied teleport for " + p.getName() + " into region " + region.getId());
 					return false;
 				}
 			}
