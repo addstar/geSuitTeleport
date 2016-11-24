@@ -149,6 +149,7 @@ public class TeleportsListener implements Listener {
 			return true;
 		}
 		for(ProtectedRegion region : set){
+			log.info(region.getId());
 			if(!playerAllowedIntoRegion(p,region)){
 				return false;
 			}
@@ -160,7 +161,7 @@ public class TeleportsListener implements Listener {
 	private boolean playerAllowedIntoRegion(final Player p,final ProtectedRegion region){
 		final Set<String> flags = region.getFlag(DefaultFlag.BLOCKED_CMDS);
 		if(flags == null) return true;
-		//log.info("Blocked Commands Found:" + flags.toString());
+		log.info("Blocked Commands Found:" + flags.toString());
 		for(final String cmd : flags){
 			if(geSuitTeleports.deny_Teleport.contains(cmd)){
 				//log.info("Blocked commands contains teleport deny command: " + cmd);
