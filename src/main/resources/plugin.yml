@@ -2,7 +2,7 @@ name: geSuitTeleports
 main : net.cubespace.geSuitTeleports.geSuitTeleports
 version: ${plugin.version}
 description: Part of the gesuit this plugin allows users to teleport to each other.
-softdepend: [WorldGaurd]
+softdepend: [WorldGuard]
 author: geNAZt, Schmoller, Narimm
 commands:
     tp:
