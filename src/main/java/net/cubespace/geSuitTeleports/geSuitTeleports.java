@@ -45,7 +45,7 @@ public class geSuitTeleports extends JavaPlugin {
     public static List<String> deny_Teleport;
     public static String tp_admin_bypass;
     private static WorldGuardPlugin mWorldGuard;
-    public static final String CHANNEL_NAME = "bungeecord:geSuitTeleport";
+    public static final String CHANNEL_NAME = "bungeecord:gesuitteleport";
     public static boolean worldGuarded;
     public static boolean geSuitSpawns;
     public static boolean logDebugMessages;
