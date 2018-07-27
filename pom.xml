@@ -87,6 +87,7 @@
             <groupId>com.sk89q</groupId>
             <artifactId>worldguard</artifactId>
             <version>${worldgaurd.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>net.cubespace</groupId>
