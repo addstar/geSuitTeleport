@@ -120,12 +120,7 @@ public class TeleportsListener implements Listener {
 		if (event.getPlayer().hasMetadata("NPC")) return; // Ignore NPCs
 	    // This is to prevent recording the back location when teleporting across servers, on the destination server
 	    TeleportsManager.ignoreTeleport.add(event.getPlayer());
-	    Bukkit.getScheduler().runTaskLaterAsynchronously( geSuitTeleports.instance, new Runnable() {
-            @Override
-            public void run() {
-                TeleportsManager.ignoreTeleport.remove(event.getPlayer());
-            }
-        }, 20 );
+	    Bukkit.getScheduler().runTaskLaterAsynchronously( geSuitTeleports.instance, () -> TeleportsManager.ignoreTeleport.remove(event.getPlayer()), 20 );
 	}
 
 }

@@ -1,6 +1,7 @@
 name: geSuitTeleports
 main : net.cubespace.geSuitTeleports.geSuitTeleports
 version: ${plugin.version}
+api-version: ${spigot.api.version}
 description: Part of the gesuit this plugin allows users to teleport to each other.
 softdepend: [WorldGuard]
 author: geNAZt, Schmoller, Narimm

@@ -4,7 +4,7 @@
 
     <groupId>net.cubespace</groupId>
     <artifactId>geSuitTeleports</artifactId>
-    <version>0.2.1-SNAPSHOT</version>
+    <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>geSuitTeleports</name>
 
@@ -12,7 +12,8 @@
         <build.number />
         <plugin.version>${project.version}-${build.number}</plugin.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spigot.version>1.12.2-R0.1-SNAPSHOT</spigot.version>
+        <spigot.api.version>1.13</spigot.api.version>
+        <spigot.version>${spigot.api.version}-R0.1-SNAPSHOT</spigot.version>
         <worldgaurd.version>6.1.1-SNAPSHOT</worldgaurd.version>
     </properties>
     <scm>
@@ -90,7 +91,7 @@
         <dependency>
             <groupId>net.cubespace</groupId>
             <artifactId>geSuitSpawn</artifactId>
-            <version>0.1.1-SNAPSHOT</version>
+            <version>0.2-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <build>

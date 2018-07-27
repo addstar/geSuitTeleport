@@ -45,6 +45,7 @@ public class geSuitTeleports extends JavaPlugin {
     public static List<String> deny_Teleport;
     public static String tp_admin_bypass;
     private static WorldGuardPlugin mWorldGuard;
+    public static final String CHANNEL_NAME = "bungeecord:geSuitTeleport";
     public static boolean worldGuarded;
     public static boolean geSuitSpawns;
     public static boolean logDebugMessages;
@@ -111,9 +112,9 @@ public class geSuitTeleports extends JavaPlugin {
 
     private void registerChannels() {
         Bukkit.getMessenger().registerIncomingPluginChannel(this,
-                "geSuitTeleport", new TeleportsMessageListener());
+                CHANNEL_NAME, new TeleportsMessageListener());
         Bukkit.getMessenger().registerOutgoingPluginChannel(this,
-                "geSuitTeleport");
+                CHANNEL_NAME);
     }
 
     private void registerListeners() {

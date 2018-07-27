@@ -15,35 +15,85 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 
 import static net.cubespace.geSuitTeleports.geSuitTeleports.logDebugMessages;
 
-
+/**
+ * The type Location util.
+ */
 public class LocationUtil {
-    // The player can stand inside these materials
-    public static final Set<Material> HOLLOW_MATERIALS = new HashSet<>();
-
+    
+    /**
+     * The type Vector 3 d.
+     */
     public static class Vector3D
     {
-        public int x;
-        public int y;
-        public int z;
-
+        /**
+         * The X.
+         */
+        private final int x;
+        /**
+         * The Y.
+         */
+        private final int y;
+        /**
+         * The Z.
+         */
+        private final int z;
+    
+        /**
+         * Instantiates a new Vector 3 d.
+         *
+         * @param x the x
+         * @param y the y
+         * @param z the z
+         */
         public Vector3D(int x, int y, int z)
         {
             this.x = x;
             this.y = y;
             this.z = z;
         }
+    
+        /**
+         * Get x int.
+         *
+         * @return the int
+         */
+        protected int getX(){
+            return x;
+        }
+    
+        /**
+         * Get y int.
+         *
+         * @return the int
+         */
+        protected int getY(){
+            return y;
+        }
+    
+        /**
+         * Gets z.
+         *
+         * @return the z
+         */
+        protected int getZ() {
+            return z;
+        }
     }
-
+    
+    /**
+     * The constant RADIUS.
+     */
     public static final int RADIUS = 16;
+    /**
+     * The constant VOLUME.
+     */
     public static final Vector3D[] VOLUME;
 
     static
@@ -59,84 +109,71 @@ public class LocationUtil {
                 }
             }
         }
-        Collections.sort(
-                pos, new Comparator<Vector3D>() {
-                    @Override
-                    public int compare(Vector3D a, Vector3D b) {
-                        return (a.x * a.x + a.y * a.y + a.z * a.z) - (b.x * b.x + b.y * b.y + b.z * b.z);
-                    }
-                }
-        );
+        pos.sort(Comparator.comparingInt(a -> (a.getX() * a.getX() + a.getY() * a.getY() + a.getZ() * a
+                .getZ())));
         VOLUME = pos.toArray(new Vector3D[0]);
     }
-
-
-    static {
-        HOLLOW_MATERIALS.add(Material.AIR);
-        HOLLOW_MATERIALS.add(Material.SAPLING);
-        HOLLOW_MATERIALS.add(Material.POWERED_RAIL);
-        HOLLOW_MATERIALS.add(Material.DETECTOR_RAIL);
-        HOLLOW_MATERIALS.add(Material.LONG_GRASS);
-        HOLLOW_MATERIALS.add(Material.DEAD_BUSH);
-        HOLLOW_MATERIALS.add(Material.YELLOW_FLOWER);
-        HOLLOW_MATERIALS.add(Material.RED_ROSE);
-        HOLLOW_MATERIALS.add(Material.BROWN_MUSHROOM);
-        HOLLOW_MATERIALS.add(Material.RED_MUSHROOM);
-        HOLLOW_MATERIALS.add(Material.TORCH);
-        HOLLOW_MATERIALS.add(Material.REDSTONE_WIRE);
-        HOLLOW_MATERIALS.add(Material.SEEDS);
-        HOLLOW_MATERIALS.add(Material.SIGN_POST);
-        HOLLOW_MATERIALS.add(Material.WOODEN_DOOR);
-        HOLLOW_MATERIALS.add(Material.LADDER);
-        HOLLOW_MATERIALS.add(Material.RAILS);
-        HOLLOW_MATERIALS.add(Material.WALL_SIGN);
-        HOLLOW_MATERIALS.add(Material.LEVER);
-        HOLLOW_MATERIALS.add(Material.STONE_PLATE);
-        HOLLOW_MATERIALS.add(Material.IRON_DOOR_BLOCK);
-        HOLLOW_MATERIALS.add(Material.WOOD_PLATE);
-        HOLLOW_MATERIALS.add(Material.REDSTONE_TORCH_OFF);
-        HOLLOW_MATERIALS.add(Material.REDSTONE_TORCH_ON);
-        HOLLOW_MATERIALS.add(Material.STONE_BUTTON);
-        HOLLOW_MATERIALS.add(Material.SNOW);
-        HOLLOW_MATERIALS.add(Material.SUGAR_CANE_BLOCK);
-        HOLLOW_MATERIALS.add(Material.DIODE_BLOCK_OFF);
-        HOLLOW_MATERIALS.add(Material.DIODE_BLOCK_ON);
-        HOLLOW_MATERIALS.add(Material.PUMPKIN_STEM);
-        HOLLOW_MATERIALS.add(Material.MELON_STEM);
-        HOLLOW_MATERIALS.add(Material.VINE);
-        HOLLOW_MATERIALS.add(Material.FENCE_GATE);
-        HOLLOW_MATERIALS.add(Material.WATER_LILY);
-        HOLLOW_MATERIALS.add(Material.NETHER_WARTS);
-
-        try // 1.6 update
-        {
-            HOLLOW_MATERIALS.add(Material.CARPET);
-        } catch (java.lang.NoSuchFieldError e) {
-
-        }
-    }
-
+    
+    /**
+     * Is block above air boolean.
+     *
+     * @param world the world
+     * @param x     the x
+     * @param y     the y
+     * @param z     the z
+     *
+     * @return the boolean
+     */
     static boolean isBlockAboveAir(final World world, final int x, final int y, final int z) {
-        return y > world.getMaxHeight() || HOLLOW_MATERIALS.contains(world.getBlockAt(x, y - 1, z).getType());
+        return y > world.getMaxHeight() || !world.getBlockAt(x, y - 1,
+                z).getType().isSolid();
     }
-
+    
+    /**
+     * Is block unsafe boolean.
+     *
+     * @param world the world
+     * @param x     the x
+     * @param y     the y
+     * @param z     the z
+     *
+     * @return the boolean
+     */
     public static boolean isBlockUnsafe(final World world, final int x, final int y, final int z) {
         return isBlockDamaging(world, x, y, z) || isBlockAboveAir(world, x, y, z);
 
     }
-
+    
+    /**
+     * Is block damaging boolean.
+     *
+     * @param world the world
+     * @param x     the x
+     * @param y     the y
+     * @param z     the z
+     *
+     * @return the boolean
+     */
     public static boolean isBlockDamaging(final World world, final int x, final int y, final int z) {
         final Block below = world.getBlockAt(x, y - 1, z);
-        if (below.getType() == Material.LAVA || below.getType() == Material.STATIONARY_LAVA) {
+        if (below.getType() == Material.LAVA || below.getType() == Material.MAGMA_BLOCK) {
             return true;
         }
         if (below.getType() == Material.FIRE) {
             return true;
         }
-        return below.getType() == Material.BED_BLOCK || (!HOLLOW_MATERIALS.contains(world.getBlockAt(x, y, z).getType())) || (!HOLLOW_MATERIALS.contains(world.getBlockAt(x, y + 1, z).getType()));
+        return (world.getBlockAt(x, y, z).getType()).isSolid() || (world
+                .getBlockAt(x, y + 1, z).getType().isSolid());
     }
-
-    // Not needed if using getSafeDestination(loc)
+    
+    /**
+     * Gets rounded destination.
+     *
+     * @param loc the loc
+     *
+     * @return the rounded destination
+     */
+// Not needed if using getSafeDestination(loc)
     public static Location getRoundedDestination(final Location loc) {
         final World world = loc.getWorld();
         int x = loc.getBlockX();
@@ -144,7 +181,15 @@ public class LocationUtil {
         int z = loc.getBlockZ();
         return new Location(world, x + 0.5, y, z + 0.5, loc.getYaw(), loc.getPitch());
     }
-
+    
+    /**
+     * Gets safe destination.
+     *
+     * @param player the player
+     * @param loc    the loc
+     *
+     * @return the safe destination
+     */
     public static Location getSafeDestination(final Player player, final Location loc) {
         if (loc.getWorld().equals(player.getWorld())
                 && ((player.getGameMode() == GameMode.CREATIVE) || (player.isFlying()))) {
@@ -153,7 +198,14 @@ public class LocationUtil {
 
         return getSafeDestination(loc);
     }
-
+    
+    /**
+     * Gets safe destination.
+     *
+     * @param loc the loc
+     *
+     * @return the safe destination
+     */
     public static Location getSafeDestination(final Location loc) {
         if (loc == null || loc.getWorld() == null) {
             return null;
@@ -186,9 +238,9 @@ public class LocationUtil {
                 z = origZ;
                 break;
             }
-            x = origX + VOLUME[i].x;
-            y = origY + VOLUME[i].y;
-            z = origZ + VOLUME[i].z;
+            x = origX + VOLUME[i].getX();
+            y = origY + VOLUME[i].getY();
+            z = origZ + VOLUME[i].getZ();
         }
         while (isBlockUnsafe(world, x, y, z)) {
             y += 1;
@@ -209,7 +261,14 @@ public class LocationUtil {
         }
         return new Location(world, x + 0.5, y, z + 0.5, loc.getYaw(), loc.getPitch());
     }
-
+    
+    /**
+     * Should fly boolean.
+     *
+     * @param loc the loc
+     *
+     * @return the boolean
+     */
     public static boolean shouldFly(Location loc) {
         final World world = loc.getWorld();
         final int x = loc.getBlockX();
@@ -224,9 +283,17 @@ public class LocationUtil {
             }
         }
 
-        return y < 0 ? true : false;
+        return y < 0;
     }
-
+    
+    /**
+     * World guard tp allowed boolean.
+     *
+     * @param l the l
+     * @param p the p
+     *
+     * @return the boolean
+     */
     public static boolean worldGuardTpAllowed(Location l, Player p) {
         Boolean result = true;
         Logger log = geSuitTeleports.instance.getLogger();

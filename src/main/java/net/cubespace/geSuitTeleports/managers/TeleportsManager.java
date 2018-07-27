@@ -19,12 +19,12 @@ import java.util.HashSet;
 
 
 public class TeleportsManager {
-    public static HashMap<String, Player> pendingTeleports = new HashMap<>();
-    public static HashMap<String, Location> pendingTeleportLocations = new HashMap<>();
-    public static HashSet<Player> ignoreTeleport = new HashSet<>();
-    public static HashSet<Player> administrativeTeleport = new HashSet<>();
+    public static final HashMap<String, Player> pendingTeleports = new HashMap<>();
+    public static final HashMap<String, Location> pendingTeleportLocations = new HashMap<>();
+    public static final HashSet<Player> ignoreTeleport = new HashSet<>();
+    public static final HashSet<Player> administrativeTeleport = new HashSet<>();
 
-    static HashMap<Player, Location> lastLocation = new HashMap<>();
+    static final HashMap<Player, Location> lastLocation = new HashMap<>();
     
     public static void RemovePlayer(Player player) {
     	pendingTeleports.remove(player.getName());
@@ -108,24 +108,21 @@ public class TeleportsManager {
             lastLocation.put(player, player.getLocation());
             player.sendMessage(geSuitTeleports.teleportinitiated);
 
-            geSuitTeleports.getInstance().getServer().getScheduler().runTaskLater(geSuitTeleports.getInstance(), new Runnable() {
-                @Override
-                public void run() {
-                	Location loc = lastLocation.get(player);
-                	lastLocation.remove(player);
-                	if (player.isOnline()) {
-                        if ((loc != null) && (loc.getBlock().equals(player.getLocation().getBlock()))) {
+            geSuitTeleports.getInstance().getServer().getScheduler().runTaskLater(geSuitTeleports.getInstance(), () -> {
+                Location loc = lastLocation.get(player);
+                lastLocation.remove(player);
+                if (player.isOnline()) {
+                    if ((loc != null) && (loc.getBlock().equals(player.getLocation().getBlock()))) {
 
-	                        player.sendMessage(geSuitTeleports.teleporting);
-	                        player.saveData();
-	                        ByteArrayOutputStream b = new ByteArrayOutputStream();
-	                        DataOutputStream out = new DataOutputStream(b);
-                            doTeleportToPlayer(out, player, target);
-                            new PluginMessageTask(b).runTaskAsynchronously(geSuitTeleports.instance);
-	                    } else {
-	                        player.sendMessage(geSuitTeleports.aborted);
-	                    }
-                	}
+                        player.sendMessage(geSuitTeleports.teleporting);
+                        player.saveData();
+                        ByteArrayOutputStream b = new ByteArrayOutputStream();
+                        DataOutputStream out = new DataOutputStream(b);
+                        doTeleportToPlayer(out, player, target);
+                        new PluginMessageTask(b).runTaskAsynchronously(geSuitTeleports.instance);
+                    } else {
+                        player.sendMessage(geSuitTeleports.aborted);
+                    }
                 }
             }, 60L);
         } else {
@@ -203,23 +200,20 @@ public class TeleportsManager {
             lastLocation.put(player, player.getLocation());
             player.sendMessage(geSuitTeleports.teleportinitiated);
 
-            geSuitTeleports.getInstance().getServer().getScheduler().runTaskLater(geSuitTeleports.getInstance(), new Runnable() {
-                @Override
-                public void run() {
-                	Location loc = lastLocation.get(player);
-                	lastLocation.remove(player);
-                	if (player.isOnline()) {
-                        if ((loc != null) && (loc.getBlock().equals(player.getLocation().getBlock()))) {
-	                        player.sendMessage(geSuitTeleports.teleporting);
-	                        player.saveData();
-	                        ByteArrayOutputStream b = new ByteArrayOutputStream();
-	                        DataOutputStream out = new DataOutputStream(b);
-                            doSendBack(out, sender);
-                            new PluginMessageTask(b).runTaskAsynchronously(geSuitTeleports.instance);
-	                    } else {
-	                        player.sendMessage(geSuitTeleports.aborted);
-	                    }
-                	}
+            geSuitTeleports.getInstance().getServer().getScheduler().runTaskLater(geSuitTeleports.getInstance(), () -> {
+                Location loc = lastLocation.get(player);
+                lastLocation.remove(player);
+                if (player.isOnline()) {
+                    if ((loc != null) && (loc.getBlock().equals(player.getLocation().getBlock()))) {
+                        player.sendMessage(geSuitTeleports.teleporting);
+                        player.saveData();
+                        ByteArrayOutputStream b = new ByteArrayOutputStream();
+                        DataOutputStream out = new DataOutputStream(b);
+                        doSendBack(out, sender);
+                        new PluginMessageTask(b).runTaskAsynchronously(geSuitTeleports.instance);
+                    } else {
+                        player.sendMessage(geSuitTeleports.aborted);
+                    }
                 }
             }, 60L);
         } else {
@@ -265,15 +259,7 @@ public class TeleportsManager {
         } else {
             pendingTeleports.put( player, t );
             //clear pending teleport if they dont connect
-            Bukkit.getScheduler().runTaskLaterAsynchronously( geSuitTeleports.instance, new Runnable() {
-                @Override
-                public void run() {
-                    if ( pendingTeleports.containsKey( player ) ) {
-                        pendingTeleports.remove( player );
-                    }
-
-                }
-            }, 100L);
+            Bukkit.getScheduler().runTaskLaterAsynchronously( geSuitTeleports.instance, () -> pendingTeleports.remove( player ), 100L);
         }
     }
 
@@ -307,13 +293,8 @@ public class TeleportsManager {
         } else {
             pendingTeleportLocations.put( player, t );
             //clear pending teleport if they dont connect
-            Bukkit.getScheduler().runTaskLaterAsynchronously( geSuitTeleports.instance, new Runnable() {
-                @Override
-                public void run() {
-                    if ( pendingTeleportLocations.containsKey( player ) ) {
-                        pendingTeleportLocations.remove( player );
-                    }
-                }
+            Bukkit.getScheduler().runTaskLaterAsynchronously( geSuitTeleports.instance, () -> {
+                pendingTeleportLocations.remove( player );
             }, 100L);
         }
     }
@@ -325,23 +306,20 @@ public class TeleportsManager {
             lastLocation.put(player, player.getLocation());
             player.sendMessage(geSuitTeleports.teleportinitiated);
 
-            geSuitTeleports.getInstance().getServer().getScheduler().runTaskLater(geSuitTeleports.getInstance(), new Runnable() {
-                @Override
-                public void run() {
-                	Location loc = lastLocation.get(player);
-                	lastLocation.remove(player);
-                	if (player.isOnline()) {
-                        if ((loc != null) && (loc.getBlock().equals(player.getLocation().getBlock()))) {
-		                    player.sendMessage(geSuitTeleports.teleporting);
-		                    player.saveData();
-		                    ByteArrayOutputStream b = new ByteArrayOutputStream();
-		                    DataOutputStream out = new DataOutputStream(b);
-                            doTeleportToPlayer(out, sender, playerName, target);
-                            new PluginMessageTask(b).runTaskAsynchronously(geSuitTeleports.instance);
-		                } else {
-		                    player.sendMessage(geSuitTeleports.aborted);
-		                }
-                	}
+            geSuitTeleports.getInstance().getServer().getScheduler().runTaskLater(geSuitTeleports.getInstance(), () -> {
+                Location loc = lastLocation.get(player);
+                lastLocation.remove(player);
+                if (player.isOnline()) {
+                    if ((loc != null) && (loc.getBlock().equals(player.getLocation().getBlock()))) {
+                        player.sendMessage(geSuitTeleports.teleporting);
+                        player.saveData();
+                        ByteArrayOutputStream b = new ByteArrayOutputStream();
+                        DataOutputStream out = new DataOutputStream(b);
+                        doTeleportToPlayer(out, sender, playerName, target);
+                        new PluginMessageTask(b).runTaskAsynchronously(geSuitTeleports.instance);
+                    } else {
+                        player.sendMessage(geSuitTeleports.aborted);
+                    }
                 }
             }, 60L);
         } else {

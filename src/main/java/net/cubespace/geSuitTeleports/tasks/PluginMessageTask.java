@@ -25,7 +25,7 @@ public class PluginMessageTask extends BukkitRunnable {
         if ( p == null ) {
             return;
         }
-        p.sendPluginMessage( geSuitTeleports.instance, "geSuitTeleport", bytes.toByteArray() );
+        p.sendPluginMessage( geSuitTeleports.instance, geSuitTeleports.CHANNEL_NAME, bytes.toByteArray() );
     }
 
 

@@ -113,162 +113,152 @@ public class TPCommand implements CommandExecutor {
         if (args.length < 1 || args.length > 6) {
             return false;
         }
-
-        // tp Player
-        if ( args.length == 1 ) {
-            // Teleport yourself to another player
-            // Do not validate target username since may not be on this server
-            Player p = Bukkit.getPlayer(sender.getName());
-            p.saveData();
-            TeleportsManager.teleportToPlayer( sender, p.getName(), args[0] );
-            return true;
-
-        }
-
-        // tp Player1 Player2
-        if ( args.length == 2 ) {
-            // Send Player1 to Player2
-            // Do not validate target username since may not be on this server
-
-            Player p = Bukkit.getPlayer(args[0]);
-            if (p == null) {
-                sender.sendMessage(geSuitTeleports.invalid_offline + args[0]);
+        Player target;
+        Player destination;
+        switch (args.length){
+            case 1:
+                // tp Player
+                // Teleport yourself to another player
+                // Do not validate target username since may not be on this server
+                target = Bukkit.getPlayer(sender.getName());
+                target.saveData();
+                TeleportsManager.teleportToPlayer( sender, target.getName(), args[0] );
                 return true;
-            }
-
-            p.saveData();
-            TeleportsManager.teleportToPlayer( sender, p.getName(), args[1] );
-            return true;
-        }
-
-        // tp X Y Z
-        if ( args.length == 3 ) {
-            // Teleport yourself to the specified coordinates (of this world)
-            // Supports relative coordinates
-            if (!validCoordinates(sender, args, 0, true)) {
-                return true;
-            }
-            Player p = Bukkit.getPlayer(sender.getName());
-            p.saveData();
-            TeleportsManager.teleportToLocation(
-                    p.getName(),                 // Player to teleport
-                    "",                          // Server
-                    p.getWorld().getName(),      // World
-                    getCoordinate(p.getLocation().getX(), args[0]),
-                    getCoordinate(p.getLocation().getY(), args[1]),
-                    getCoordinate(p.getLocation().getZ(), args[2]),
-                    p.getLocation().getYaw(),
-                    p.getLocation().getPitch() );
-            return true;
-        }
-
-        // tp Player X Y Z
-        // tp X Y Z World
-        if ( args.length == 4) {
-            Player p = Bukkit.getPlayer(sender.getName());
-            Player p2 = Bukkit.getPlayer( args[0] );
-            if ( p2 != null ) {
-                // Teleport another player to the given coordinates (of this world)
-                // Supports coordinates relative to the sender
-                if (!validCoordinates(sender, args, 1, true)) {
+            case 2:
+                // tp Player1 Player2
+                // Send Player1 to Player2
+                // Do not validate target username since may not be on this server
+    
+                target = Bukkit.getPlayer(args[0]);
+                if (target == null) {
+                    sender.sendMessage(geSuitTeleports.invalid_offline + args[0]);
                     return true;
                 }
-                p2.saveData();
+    
+                target.saveData();
+                TeleportsManager.teleportToPlayer( sender, target.getName(), args[1] );
+                return true;
+            case 3:
+                // tp X Y Z
+                // Teleport yourself to the specified coordinates (of this world)
+                // Supports relative coordinates
+                if (!validCoordinates(sender, args, 0, true)) {
+                    return true;
+                }
+                target = Bukkit.getPlayer(sender.getName());
+                target.saveData();
                 TeleportsManager.teleportToLocation(
-                        p2.getName(),                // Player to teleport
+                        target.getName(),                 // Player to teleport
                         "",                          // Server
-                        p.getWorld().getName(),      // World
-                        getCoordinate(p.getLocation().getX(), args[1]),
-                        getCoordinate(p.getLocation().getY(), args[2]),
-                        getCoordinate(p.getLocation().getZ(), args[3]),
-                        p2.getLocation().getYaw(),
-                        p2.getLocation().getPitch() );
-            } else {
-                // Teleport yourself to the specified coordinates of the given world (on this server)
-                // Cannot use relative coordinates since potentially switching worlds
-                if (!validCoordinates(sender, args, 0, false)) {
-                    return true;
-                }
-                p.saveData();
-                TeleportsManager.teleportToLocation(
-                        p.getName(),                 // Player to teleport
-                        "",                          // Server
-                        args[3],                     // World
-                        Double.valueOf(args[0]),
-                        Double.valueOf(args[1]),
-                        Double.valueOf(args[2]),
-                        p.getLocation().getYaw(),
-                        p.getLocation().getPitch());
-            }
-            return true;
-        }
-
-        // tp Player X Y Z World
-        // tp Server World X Y Z
-        if ( args.length == 5 ) {
-            Player p = Bukkit.getPlayer(sender.getName());
-            Player p2 = Bukkit.getPlayer( args[0] );
-            if ( p2 != null ) {
-                // Teleport another player to the given coordinates of the given world (on this server)
-                // Cannot use relative coordinates since potentially switching worlds
-                if (!validCoordinates(sender, args, 1, false)) {
-                    return true;
-                }
-                p2.saveData();
-                TeleportsManager.teleportToLocation(
-                        p2.getName(),                // Player to teleport
-                        "",                          // Server
-                        args[4],                     // World
-                        Double.valueOf(args[1]),
-                        Double.valueOf(args[2]),
-                        Double.valueOf(args[3]),
-                        p2.getLocation().getYaw(),
-                        p2.getLocation().getPitch());
-            } else {
-                // Teleport yourself to the given coordinates on the given server and world
-                // Cannot use relative coordinates since potentially switching server or world
-                if (!validCoordinates(sender, args, 2, false)) {
-                    return true;
-                }
-                p.saveData();
-                TeleportsManager.teleportToLocation(
-                        p.getName(),                 // Player to teleport
-                        args[0],                     // Server
-                        args[1],                     // World
-                        Double.valueOf(args[2]),
-                        Double.valueOf(args[3]),
-                        Double.valueOf(args[4]),
-                        p.getLocation().getYaw(),
-                        p.getLocation().getPitch());
-            }
-            return true;
-        }
-
-        // tp Player X Y Z World Server
-        if ( args.length == 6 ) {
-            Player p2 = Bukkit.getPlayer( args[0] );
-            if (p2 == null) {
-                sender.sendMessage(geSuitTeleports.invalid_offline + args[0]);
+                        target.getWorld().getName(),      // World
+                        getCoordinate(target.getLocation().getX(), args[0]),
+                        getCoordinate(target.getLocation().getY(), args[1]),
+                        getCoordinate(target.getLocation().getZ(), args[2]),
+                        target.getLocation().getYaw(),
+                        target.getLocation().getPitch() );
                 return true;
-            }
-
-            // Teleport another player to the given coordinates of the given server and world
-            // Cannot use relative coordinates since potentially switching server or world
-            if (!validCoordinates(sender, args, 1, false)) {
+            case 4:
+                // tp Player X Y Z
+                // tp X Y Z World
+                target = Bukkit.getPlayer(sender.getName());
+                destination = Bukkit.getPlayer( args[0] );
+                if ( destination != null ) {
+                    // Teleport another player to the given coordinates (of this world)
+                    // Supports coordinates relative to the sender
+                    if (!validCoordinates(sender, args, 1, true)) {
+                        return true;
+                    }
+                    destination.saveData();
+                    TeleportsManager.teleportToLocation(
+                            destination.getName(),                // Player to teleport
+                            "",                          // Server
+                            target.getWorld().getName(),      // World
+                            getCoordinate(target.getLocation().getX(), args[1]),
+                            getCoordinate(target.getLocation().getY(), args[2]),
+                            getCoordinate(target.getLocation().getZ(), args[3]),
+                            destination.getLocation().getYaw(),
+                            destination.getLocation().getPitch() );
+                } else {
+                    // Teleport yourself to the specified coordinates of the given world (on this server)
+                    // Cannot use relative coordinates since potentially switching worlds
+                    if (!validCoordinates(sender, args, 0, false)) {
+                        return true;
+                    }
+                    target.saveData();
+                    TeleportsManager.teleportToLocation(
+                            target.getName(),                 // Player to teleport
+                            "",                          // Server
+                            args[3],                     // World
+                            Double.valueOf(args[0]),
+                            Double.valueOf(args[1]),
+                            Double.valueOf(args[2]),
+                            target.getLocation().getYaw(),
+                            target.getLocation().getPitch());
+                }
                 return true;
-            }
-            p2.saveData();
-            TeleportsManager.teleportToLocation(
-                    p2.getName(),                // Player to teleport
-                    args[5],                     // Server
-                    args[4],                     // World
-                    Double.valueOf(args[1]),
-                    Double.valueOf(args[2]),
-                    Double.valueOf(args[3]),
-                    p2.getLocation().getYaw(),
-                    p2.getLocation().getPitch());
+            case 5:
+                // tp Player X Y Z World
+                // tp Server World X Y Z
+                target = Bukkit.getPlayer(sender.getName());
+                destination = Bukkit.getPlayer( args[0] );
+                if ( destination != null ) {
+                    // Teleport another player to the given coordinates of the given world (on this server)
+                    // Cannot use relative coordinates since potentially switching worlds
+                    if (!validCoordinates(sender, args, 1, false)) {
+                        return true;
+                    }
+                    destination.saveData();
+                    TeleportsManager.teleportToLocation(
+                            destination.getName(),                // Player to teleport
+                            "",                          // Server
+                            args[4],                     // World
+                            Double.valueOf(args[1]),
+                            Double.valueOf(args[2]),
+                            Double.valueOf(args[3]),
+                            destination.getLocation().getYaw(),
+                            destination.getLocation().getPitch());
+                } else {
+                    // Teleport yourself to the given coordinates on the given server and world
+                    // Cannot use relative coordinates since potentially switching server or world
+                    if (!validCoordinates(sender, args, 2, false)) {
+                        return true;
+                    }
+                    target.saveData();
+                    TeleportsManager.teleportToLocation(
+                            target.getName(),                 // Player to teleport
+                            args[0],                     // Server
+                            args[1],                     // World
+                            Double.valueOf(args[2]),
+                            Double.valueOf(args[3]),
+                            Double.valueOf(args[4]),
+                            target.getLocation().getYaw(),
+                            target.getLocation().getPitch());
+                }
+                return true;
+            case 6:
+                // tp Player X Y Z World Server
+                    destination = Bukkit.getPlayer( args[0] );
+                    if (destination == null) {
+                        sender.sendMessage(geSuitTeleports.invalid_offline + args[0]);
+                        return true;
+                    }
+    
+                    // Teleport another player to the given coordinates of the given server and world
+                    // Cannot use relative coordinates since potentially switching server or world
+                    if (!validCoordinates(sender, args, 1, false)) {
+                        return true;
+                    }
+                    destination.saveData();
+                    TeleportsManager.teleportToLocation(
+                            destination.getName(),                // Player to teleport
+                            args[5],                     // Server
+                            args[4],                     // World
+                            Double.valueOf(args[1]),
+                            Double.valueOf(args[2]),
+                            Double.valueOf(args[3]),
+                            destination.getLocation().getYaw(),
+                            destination.getLocation().getPitch());
         }
-
         return false;
     }
 
@@ -306,16 +296,21 @@ public class TPCommand implements CommandExecutor {
             else
                 coordValue = coordValue.substring(1);
         }
-
+    
+        if (checkValidCoord(sender, coordName, coordValue)) return false;
+    
+        return true;
+    }
+    
+    static boolean checkValidCoord(CommandSender sender, String coordName, String coordValue) {
         if (!NumberUtils.isNumber(coordValue)) {
             if (coordName.equals("X"))
                 sender.sendMessage(geSuitTeleports.invalid_x_coordinate_or_player + coordValue);
             else
                 sender.sendMessage(geSuitTeleports.invalid + coordName + geSuitTeleports.coordinate + coordValue);
-            return false;
+            return true;
         }
-
-        return true;
+        return false;
     }
-
+    
 }
