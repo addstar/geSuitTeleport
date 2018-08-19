@@ -7,10 +7,7 @@ import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import net.cubespace.geSuitTeleports.geSuitTeleports;
 import net.cubespace.geSuitTeleports.managers.TeleportsManager;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
@@ -156,7 +153,14 @@ public class LocationUtil {
      */
     public static boolean isBlockDamaging(final World world, final int x, final int y, final int z) {
         final Block below = world.getBlockAt(x, y - 1, z);
-        if (below.getType() == Material.LAVA || below.getType() == Material.MAGMA_BLOCK) {
+        Material magma = null;
+        try {
+            if (geSuitTeleports.getInstance().getServer().getVersion().equals("1.13"))
+                magma = Material.getMaterial("MAGMA_BLOCK");
+        } catch (Exception e) {
+            magma = Material.getMaterial("MAGMA");
+        }
+        if (below.getType() == Material.LAVA || below.getType() == magma) {
             return true;
         }
         if (below.getType() == Material.FIRE) {
@@ -295,7 +299,7 @@ public class LocationUtil {
      * @return the boolean
      */
     public static boolean worldGuardTpAllowed(Location l, Player p) {
-        Boolean result = true;
+        boolean result = true;
         Logger log = geSuitTeleports.instance.getLogger();
         if(logDebugMessages) log.info("Checking if WG allows TP. Status of Plugin:"+geSuitTeleports.worldGuarded);//Todo remove after debug
         if (geSuitTeleports.worldGuarded) {
